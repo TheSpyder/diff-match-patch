@@ -1,3 +1,8 @@
+'use strict'
+
+const { test } = require('zora');
+const { diff_match_patch, DIFF_DELETE, DIFF_INSERT, DIFF_EQUAL } = require('../diff_match_patch_uncompressed');
+
 /**
  * Diff Match and Patch -- Test Harness
  * Copyright 2018 The diff-match-patch Authors.
@@ -18,17 +23,11 @@
 
 
 // If expected and actual are the equivalent, pass the test.
-function assertEquivalent(msg, expected, actual) {
-  if (typeof actual == 'undefined') {
-    // msg is optional.
-    actual = expected;
-    expected = msg;
-    msg = 'Expected: \'' + expected + '\' Actual: \'' + actual + '\'';
-  }
+function assertEquivalent(expected, actual) {
   if (_equivalent(expected, actual)) {
-    return assertEquals(msg, String(expected), String(actual));
+    return assertEquals(String(expected), String(actual));
   } else {
-    return assertEquals(msg, expected, actual);
+    return assertEquals(expected, actual);
   }
 }
 
@@ -545,7 +544,7 @@ function testDiffDelta() {
     }
 
     for(let i = 0; i < 1000; i++) {
-      newText = applyRandomTextEdit(originalText);
+      var newText = applyRandomTextEdit(originalText);
       dmp.diff_toDelta(dmp.diff_main(originalText, newText));
     }
   })();
@@ -1094,3 +1093,62 @@ function testPatchApply() {
   results = dmp.patch_apply(patches, 'x');
   assertEquivalent(['x123', [true]], results);
 }
+
+
+/**
+ * Ported from the old assertion functions in google's HTML test suite
+ */
+
+// If expected and actual are the identical, print 'Ok', otherwise 'Fail!'
+function assertEquals(expected, actual) {
+  assert.equal(actual, expected);
+}
+
+function assertTrue(actual) {
+  assertEquals(true, actual);
+}
+
+function assertFalse(actual) {
+  assertEquals(false, actual);
+}
+
+const tests = [
+  'testDiffCommonPrefix',
+  'testDiffCommonSuffix',
+  'testDiffCommonOverlap',
+  'testDiffHalfMatch',
+  'testDiffLinesToChars',
+  'testDiffCharsToLines',
+  'testDiffCleanupMerge',
+  'testDiffCleanupSemanticLossless',
+  'testDiffCleanupSemantic',
+  'testDiffCleanupEfficiency',
+  'testDiffPrettyHtml',
+  'testDiffText',
+  'testDiffDelta',
+  'testDiffXIndex',
+  'testDiffLevenshtein',
+  'testDiffBisect',
+  'testDiffMain',
+  'testMatchAlphabet',
+  'testMatchBitap',
+  'testMatchMain',
+  'testPatchObj',
+  'testPatchFromText',
+  'testPatchToText',
+  'testPatchAddContext',
+  'testPatchMake',
+  'testPatchSplitMax',
+  'testPatchAddPadding',
+  'testPatchApply'
+];
+
+// in order to avoid changing the test code, at least for now, we expose the zora assertion object with a mutable let
+let assert;
+tests.forEach(item => {
+  test(item, (t) => {
+    assert = t;
+    eval(item)()
+    assert = undefined;
+  })
+});

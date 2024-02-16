@@ -11,9 +11,17 @@
     "import": "./diff_match_patch_uncompressed.js",
     "require": "./index.mjs"
   },
+  "scripts": {
+    "prepublishOnly": "test",
+    "test": "pta tests/*.js"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/dmsnell/diff-match-patch"
   },
-  "license": "Apache-2.0"
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "pta": "^1.2.0",
+    "zora": "^5.2.0"
+  }
 }
