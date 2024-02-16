@@ -1,0 +1,19 @@
+{
+  "name": "@dmsnell/diff-match-patch",
+  "version": "1.0.0",
+  "description": "Active fork of Google's diff-match-patch",
+  "keywords": [
+    "diff",
+    "diff-match-patch",
+    "google-diff-match-patch"
+  ],
+  "exports": {
+    "import": "./diff_match_patch_uncompressed.js",
+    "require": "./index.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dmsnell/diff-match-patch"
+  },
+  "license": "Apache-2.0"
+}

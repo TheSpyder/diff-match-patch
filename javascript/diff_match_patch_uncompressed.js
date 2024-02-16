@@ -68,26 +68,15 @@ var DIFF_EQUAL = 0;
 
 /**
  * Class representing one diff tuple.
- * Attempts to look like a two-element array (which is what this used to be).
+ * Constructor returns an actual two-element array, to allow destructuring
+ * See https://github.com/JackuB/diff-match-patch/issues/14 for details
  * @param {number} op Operation, one of: DIFF_DELETE, DIFF_INSERT, DIFF_EQUAL.
  * @param {string} text Text to be deleted, inserted, or retained.
  * @constructor
  */
 diff_match_patch.Diff = function(op, text) {
-  this[0] = op;
-  this[1] = text;
+  return [op, text];
 };
-
-diff_match_patch.Diff.prototype.length = 2;
-
-/**
- * Emulate the output of a two-element array.
- * @return {string} Diff operation as a string.
- */
-diff_match_patch.Diff.prototype.toString = function() {
-  return this[0] + ',' + this[1];
-};
-
 
 /**
  * Find the differences between two texts.  Simplifies the problem by stripping
@@ -2395,18 +2384,10 @@ diff_match_patch.patch_obj.prototype.toString = function() {
   return text.join('').replace(/%20/g, ' ');
 };
 
-// CLOSURE:begin_strip
-// Lines below here will not be included in the Closure-compatible library.
 
-// Export these global variables so that they survive Google's JS compiler.
-// In a browser, 'this' will be 'window'.
-// Users of node.js should 'require' the uncompressed version since Google's
-// JS compiler may break the following exports for non-browser environments.
-/** @suppress {globalThis} */
-this['diff_match_patch'] = diff_match_patch;
-/** @suppress {globalThis} */
-this['DIFF_DELETE'] = DIFF_DELETE;
-/** @suppress {globalThis} */
-this['DIFF_INSERT'] = DIFF_INSERT;
-/** @suppress {globalThis} */
-this['DIFF_EQUAL'] = DIFF_EQUAL;
+// The following export code was added by @ForbesLindesay
+module.exports = diff_match_patch;
+module.exports['diff_match_patch'] = diff_match_patch;
+module.exports['DIFF_DELETE'] = DIFF_DELETE;
+module.exports['DIFF_INSERT'] = DIFF_INSERT;
+module.exports['DIFF_EQUAL'] = DIFF_EQUAL;
