@@ -11,7 +11,7 @@
   "type": "module",
   "main": "./index.mjs",
   "scripts": {
-    "prepublishOnly": "test",
+    "prepublishOnly": "npm test",
     "test": "node --test"
   },
   "repository": {
